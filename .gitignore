@@ -1,0 +1,20 @@
+# Python — virtual env + bytecode                                                                                                                                                  
+backend/venv/                                                                                                                                                                      
+__pycache__/                           
+*.pyc                                                                                                                                                                              
+                                                    
+# Secrets — Phase 2 will add backend/.env with API keys
+.env                                                                                                                                                                               
+*.env.local
+                                                                                                                                                                                    
+# macOS metadata                                     
+.DS_Store                              
+
+# IDE settings
+.vscode/
+.idea/                                                                                                                                                                             
+
+# Internal dev tooling (not part of deliverable)                                                                                                                                   
+.claude/                                             
+CLAUDE.md                              
+ownyourcode/
