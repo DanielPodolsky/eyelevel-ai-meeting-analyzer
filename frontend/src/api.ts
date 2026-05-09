@@ -1,0 +1,120 @@
+import type {
+  ErrorEvent,
+  MeetingAnalysis,
+  ResultEvent,
+  StatusEvent,
+  TranscriptEvent,
+} from "./types/contracts";
+
+interface AnalyzeCallbacks {
+  onStatus: (event: StatusEvent) => void;
+  onTranscript: (event: TranscriptEvent) => void;
+  onResult: (event: ResultEvent) => void;
+  onError: (event: ErrorEvent) => void;
+  onDone: () => void;
+  onNetworkError: (message: string) => void;
+}
+
+// EventSource only supports GET, but our /analyze endpoint is POST with a
+// multipart body. So we use fetch() with a streaming reader and parse the
+// SSE wire format manually.
+export async function streamAnalyze(
+  file: File,
+  callbacks: AnalyzeCallbacks,
+): Promise<void> {
+  const formData = new FormData();
+  formData.append("audio", file);
+
+  let response: Response;
+  try {
+    response = await fetch("http://127.0.0.1:8000/analyze", {
+      method: "POST",
+      body: formData,
+    });
+  } catch {
+    callbacks.onNetworkError(
+      "השרת לא מגיב — ודא שה-backend רץ על פורט 8000",
+    );
+    return;
+  }
+
+  if (!response.ok || !response.body) {
+    callbacks.onNetworkError(`שגיאה מהשרת: HTTP ${response.status}`);
+    return;
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    // Normalize CRLF → LF. sse-starlette emits \r\n\r\n between events;
+    // RFC 6202 says clients MUST accept both, so we collapse to the LF form.
+    buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+
+    // SSE events are separated by a blank line (\n\n).
+    let boundary: number;
+    while ((boundary = buffer.indexOf("\n\n")) !== -1) {
+      const eventBlock = buffer.slice(0, boundary);
+      buffer = buffer.slice(boundary + 2);
+
+      let eventName = "message";
+      let dataLine = "";
+      for (const line of eventBlock.split("\n")) {
+        if (line.startsWith("event: ")) eventName = line.slice(7).trim();
+        else if (line.startsWith("data: ")) dataLine = line.slice(6).trim();
+        // sse-starlette emits ': ping ...' keepalives — silently ignored.
+      }
+      if (!dataLine) continue;
+
+      try {
+        const data = JSON.parse(dataLine);
+        // Debug: lets developers see streaming behavior live in DevTools
+        console.log(`[SSE] ${eventName}`, data);
+        switch (eventName) {
+          case "status":
+            callbacks.onStatus(data as StatusEvent);
+            break;
+          case "transcript":
+            callbacks.onTranscript(data as TranscriptEvent);
+            break;
+          case "result":
+            callbacks.onResult(data as ResultEvent);
+            break;
+          case "error":
+            callbacks.onError(data as ErrorEvent);
+            break;
+          case "done":
+            callbacks.onDone();
+            return;
+        }
+      } catch (parseErr) {
+        console.error("SSE parse error:", parseErr, dataLine);
+      }
+    }
+  }
+}
+
+export async function downloadDocx(analysis: MeetingAnalysis): Promise<void> {
+  const response = await fetch("http://127.0.0.1:8000/export", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(analysis),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Export failed: HTTP ${response.status}`);
+  }
+
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "meeting_summary.docx";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}

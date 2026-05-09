@@ -30,13 +30,20 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Eye Level AI — Hebrew Meeting Analyzer")
 
-# Vite dev server (Phase 3) lives at :5173. CRA fallback at :3000.
+# Vite dev server (Phase 3) lives at :5173. Both 'localhost' and '127.0.0.1'
+# variants must be allowed because they are distinct origins to CORS.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
 
