@@ -28,7 +28,9 @@ type Phase = "idle" | "processing" | "done" | "error";
 type Step = "transcribing" | "summarizing" | null;
 
 const ACCEPTED_EXTENSIONS = [".mp3", ".wav", ".m4a"];
-const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+// Backend supports up to 100MB — files >25MB are server-side chunked at silence
+// boundaries before transcription. Client-side cap matches the backend ceiling.
+const MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024;
 
 function App() {
   const [phase, setPhase] = useState<Phase>("idle");
@@ -85,7 +87,7 @@ function App() {
       return `פורמט לא נתמך — רק ${ACCEPTED_EXTENSIONS.join(" / ")}`;
     }
     if (file.size > MAX_FILE_SIZE_BYTES) {
-      return 'הקובץ גדול מדי — מקסימום 25 מ"ב';
+      return 'הקובץ גדול מדי — מקסימום 100 מ"ב';
     }
     if (file.size === 0) {
       return "הקובץ ריק";

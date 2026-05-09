@@ -84,7 +84,7 @@ export function DropZone({ onFile, onSample }: Props) {
           <span className="mx-2 text-faint">·</span>
           <span className="font-mono text-[13px]">mp3 · wav · m4a</span>
           <span className="mx-2 text-faint">·</span>
-          <span dir="ltr">עד 25 מ"ב</span>
+          <span dir="ltr">עד 100 מ"ב</span>
         </p>
         <input
           ref={inputRef}

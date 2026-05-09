@@ -14,7 +14,10 @@ __pycache__/
 .vscode/
 .idea/                                                                                                                                                                             
 
-# Internal dev tooling (not part of deliverable)                                                                                                                                   
-.claude/                                             
-CLAUDE.md                              
+# Internal dev tooling (not part of deliverable)
+.claude/
+CLAUDE.md
 ownyourcode/
+
+# Test audio — too large to commit
+prompts/test_audio/
