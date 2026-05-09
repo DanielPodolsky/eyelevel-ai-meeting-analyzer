@@ -4,7 +4,7 @@ from .contracts import Decision, ActionItem, OpenItem
 
 
 class StatusEvent(BaseModel):
-    step: Literal["transcribing", "summarizing", "exporting"] = Field(..., description="Current pipeline step")
+    step: Literal["transcribing", "summarizing"] = Field(..., description="Current pipeline step")
 
 
 class TranscriptEvent(BaseModel):
