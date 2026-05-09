@@ -74,12 +74,6 @@ _Computed from the empirical token counts × Anthropic's published per-token rat
 - **`temperature: 0`** — determinism is required for stable iteration. With `temperature > 0`, the same input produces different outputs each call, making regression checks meaningless. The R8→R9 schema expansion, R12 anti-decision marker rule, and R14→R16 rules-ripple regression were all reproducible because of this.
 - **`max_tokens: 4096`** — comfortably above the longest observed output (~2000 tokens for a decisions-heavy meeting); leaves headroom for unusually rich transcripts without being so generous it masks runaway-generation bugs.
 
-### The empirical case
-
-The 16-round iteration log across three Hebrew transcripts — product sync (mixed content), brainstorming (zero decisions / zero action items), CTO announcement (decisions-heavy / actions-light) — IS the evidence that this configuration handles the workload cleanly across meeting genres. Each round was reproducible because of `temperature: 0`; each rule fix targeted a _broader category_ than the surface form of the bug because the model had `effort: medium` headroom to apply rules generally rather than chase specific surface patterns.
-
-**Prompt caching empirically verified:** Call 1 returned `cache_create=3549, cache_read=0` (cold cache, 3549-token write). Call 2 returned `cache_read=3549, cache_create=1536, input=3` (warm cache — 100% hit on the system prompt, only 3 fresh tokens of user-message processing). At Sonnet 4.6 pricing, the cached portion drops to $0.30/MTok — putting steady-state effective cost in Haiku's tier _without_ Haiku's quality compromise.
-
 ### TL;DR
 
 Sonnet 4.6 is the _cheapest model that meets the accuracy bar_ for 19-rule Hebrew meeting analysis — **empirically validated**, not asserted. Opus 4.7 produced equivalent output at 1.68× the cost AND deprecated the `temperature` parameter we need for reproducible iteration. Haiku 4.5 misclassified the K8s anti-decision marker (rule R12 failure shipped to production) AND ate most of its theoretical per-token cost advantage via Hebrew-tokenizer inefficiency (4× more tokens for the same input). With prompt caching in production, Sonnet's effective per-call cost (~$0.011) is within striking distance of Haiku's floor (~$0.010) — without Haiku's rule failure.
