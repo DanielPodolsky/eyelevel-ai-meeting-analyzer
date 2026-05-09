@@ -181,4 +181,4 @@ Captured live via OwnYourCode's `/own:stuck` framework: **READ → ISOLATE → D
 
 ## Appendix — System Prompt + Design Rationale
 
-The full system prompt and its full design rationale (16-round iteration log, schema decisions, the 19 affirmatively-phrased rules) live in [`prompts/summary_system_prompt.md`](./prompts/summary_system_prompt.md) — **submission #4, the centerpiece** of this evaluation per the brief's _"זה חלק קריטי"_.
+The full system prompt and its full design rationale (16-round iteration log, schema decisions, the 20 affirmatively-phrased rules) live in [`prompts/summary_system_prompt.md`](./prompts/summary_system_prompt.md) — **submission #4, the centerpiece** of this evaluation per the brief's _"זה חלק קריטי"_.

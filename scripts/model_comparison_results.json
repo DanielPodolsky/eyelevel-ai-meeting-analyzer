@@ -1,14 +1,14 @@
 [
   {
     "model": "claude-opus-4-7",
-    "elapsed_s": 15.32,
+    "elapsed_s": 16.77,
     "input_tokens": 1243,
-    "output_tokens": 1057,
-    "cache_create": 4557,
+    "output_tokens": 1050,
+    "cache_create": 4766,
     "cache_read": 0,
-    "raw_output": "<summary>\nישיבה רבעונית של צוות ההנדסה שבה אבי עדכן על שלוש החלטות אסטרטגיות מההנהלה: הקפאת גיוסים עד סוף Q1 כולל ביטול משרות backend פתוחות, מעבר ל-Go בכל microservice חדש (כשהקוד הקיים בפייתון נשאר בינתיים), והורדת ProductX ו-ProductY מה-roadmap לטובת sunset. יוסי קיבל אישור שתקציב ה-monitoring וה-Datadog נשמר. עלו מספר שאלות פתוחות — מיגרציה של הקוד הקיים בפייתון, צורך בתוכנית הכשרה ל-Go, וגורל הצוותים שעובדים על המוצרים שיורדים. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>הקפאת גיוסים לשלושת החודשים הקרובים, כולל שתי משרות ה-backend הפתוחות שמבוטלות בינתיים</context>\n</decision>\n<decision>\n<text>כל microservice חדש שייכתב יהיה ב-Go, לא בפייתון</text>\n<context>הקוד הקיים בפייתון נשאר בינתיים ולא יעבור מיגרציה כעת</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset וההחלטה סופית</text>\n<context>החברה לא תמשיך להשקיע בהם; ענייני staffing ספציפיים יטופלו אחד-על-אחד עם המנהלים הישירים</context>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>מיגרציה של מאות אלפי שורות הקוד הקיים בפייתון — אין לוח זמנים והנושא נדחה לחשיבה ברבעון הבא</text>\n</open_item>\n<open_item>\n<text>תוכנית הכשרה ל-Go עבור הצוות — הוצעו workshop פנימי או קורס חיצוני אך טרם גובשה החלטה</text>\n</open_item>\n<open_item>\n<text>גורל הצוותים שעובדים על ProductX ו-ProductY — ייטפל אחד-על-אחד עם המנהלים הישירים ולא נדון בישיבה</text>\n</open_item>\n</open_items>",
+    "raw_output": "<summary>\nישיבה רבעונית של צוות ההנדסה שבה אבי עדכן על שלוש החלטות אסטרטגיות מההנהלה: הקפאת גיוסים בכל הפוזיציות עד סוף Q1, מעבר ל-Go בכל microservice חדש (כאשר הקוד הקיים בפייתון נשאר בינתיים), ו-sunset של ProductX ו-ProductY. עלו שאלות לגבי מיגרציה של ה-codebase הקיים, הכשרה ב-Go, staffing של הצוותים שעובדים על המוצרים שיורדים, ו-container orchestration. אבי הבהיר שתקציב ה-monitoring נשמר ושאלת ה-K8s אינה חלק מההחלטות היום, ושענייני ה-staffing יטופלו אחד-על-אחד. בסיום התחייב אבי להפיץ מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>כל המשרות הפתוחות, כולל ב-backend, מבוטלות בינתיים</context>\n</decision>\n<decision>\n<text>כל microservice חדש ייכתב ב-Go ולא בפייתון</text>\n</decision>\n<decision>\n<text>הקוד הקיים נשאר בפייתון בינתיים ולא נעבור עליו</text>\n<context>אין לוח זמנים מדויק על מיגרציה; הנושא ייבחן ברבעון הבא</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset, ולא נמשיך להשקיע בהם</text>\n<context>אבי ציין שההחלטה סופית</context>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>לוח הזמנים והאופן של מיגרציית ה-codebase הקיים בפייתון — נדחה לבחינה ברבעון הבא</text>\n</open_item>\n<open_item>\n<text>תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) — הוצעה אך טרם גובשה</text>\n</open_item>\n<open_item>\n<text>staffing של הצוותים שעובדים על ProductX ו-ProductY — ייטופל אחד-על-אחד עם המנהלים הישירים ולא נדון בישיבה</text>\n</open_item>\n</open_items>",
     "parsed": {
-      "summary": "ישיבה רבעונית של צוות ההנדסה שבה אבי עדכן על שלוש החלטות אסטרטגיות מההנהלה: הקפאת גיוסים עד סוף Q1 כולל ביטול משרות backend פתוחות, מעבר ל-Go בכל microservice חדש (כשהקוד הקיים בפייתון נשאר בינתיים), והורדת ProductX ו-ProductY מה-roadmap לטובת sunset. יוסי קיבל אישור שתקציב ה-monitoring וה-Datadog נשמר. עלו מספר שאלות פתוחות — מיגרציה של הקוד הקיים בפייתון, צורך בתוכנית הכשרה ל-Go, וגורל הצוותים שעובדים על המוצרים שיורדים. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.",
+      "summary": "ישיבה רבעונית של צוות ההנדסה שבה אבי עדכן על שלוש החלטות אסטרטגיות מההנהלה: הקפאת גיוסים בכל הפוזיציות עד סוף Q1, מעבר ל-Go בכל microservice חדש (כאשר הקוד הקיים בפייתון נשאר בינתיים), ו-sunset של ProductX ו-ProductY. עלו שאלות לגבי מיגרציה של ה-codebase הקיים, הכשרה ב-Go, staffing של הצוותים שעובדים על המוצרים שיורדים, ו-container orchestration. אבי הבהיר שתקציב ה-monitoring נשמר ושאלת ה-K8s אינה חלק מההחלטות היום, ושענייני ה-staffing יטופלו אחד-על-אחד. בסיום התחייב אבי להפיץ מסמך Q&A מסודר עד סוף השבוע.",
       "participants": [
         "אבי",
         "מיכל",
@@ -18,15 +18,19 @@
       "decisions": [
         {
           "text": "freeze על כל פוזיציה חדשה עד סוף Q1",
-          "context": "הקפאת גיוסים לשלושת החודשים הקרובים, כולל שתי משרות ה-backend הפתוחות שמבוטלות בינתיים"
+          "context": "כל המשרות הפתוחות, כולל ב-backend, מבוטלות בינתיים"
         },
         {
-          "text": "כל microservice חדש שייכתב יהיה ב-Go, לא בפייתון",
-          "context": "הקוד הקיים בפייתון נשאר בינתיים ולא יעבור מיגרציה כעת"
+          "text": "כל microservice חדש ייכתב ב-Go ולא בפייתון",
+          "context": null
         },
         {
-          "text": "ProductX ו-ProductY הולכים ל-sunset וההחלטה סופית",
-          "context": "החברה לא תמשיך להשקיע בהם; ענייני staffing ספציפיים יטופלו אחד-על-אחד עם המנהלים הישירים"
+          "text": "הקוד הקיים נשאר בפייתון בינתיים ולא נעבור עליו",
+          "context": "אין לוח זמנים מדויק על מיגרציה; הנושא ייבחן ברבעון הבא"
+        },
+        {
+          "text": "ProductX ו-ProductY הולכים ל-sunset, ולא נמשיך להשקיע בהם",
+          "context": "אבי ציין שההחלטה סופית"
         }
       ],
       "action_items": [
@@ -38,35 +42,35 @@
       ],
       "open_items": [
         {
-          "text": "מיגרציה של מאות אלפי שורות הקוד הקיים בפייתון — אין לוח זמנים והנושא נדחה לחשיבה ברבעון הבא"
+          "text": "לוח הזמנים והאופן של מיגרציית ה-codebase הקיים בפייתון — נדחה לבחינה ברבעון הבא"
         },
         {
-          "text": "תוכנית הכשרה ל-Go עבור הצוות — הוצעו workshop פנימי או קורס חיצוני אך טרם גובשה החלטה"
+          "text": "תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) — הוצעה אך טרם גובשה"
         },
         {
-          "text": "גורל הצוותים שעובדים על ProductX ו-ProductY — ייטפל אחד-על-אחד עם המנהלים הישירים ולא נדון בישיבה"
+          "text": "staffing של הצוותים שעובדים על ProductX ו-ProductY — ייטופל אחד-על-אחד עם המנהלים הישירים ולא נדון בישיבה"
         }
       ]
     },
     "parse_error": null,
     "counts": {
       "participants": 4,
-      "decisions": 3,
+      "decisions": 4,
       "action_items": 1,
       "open_items": 3,
-      "summary_chars": 472
+      "summary_chars": 510
     }
   },
   {
     "model": "claude-sonnet-4-6",
-    "elapsed_s": 19.58,
+    "elapsed_s": 22.63,
     "input_tokens": 1169,
-    "output_tokens": 1063,
-    "cache_create": 3549,
+    "output_tokens": 1107,
+    "cache_create": 3694,
     "cache_read": 0,
-    "raw_output": "<summary>\nישיבת עדכון רבעונית של צוות ההנדסה שבה הציג אבי שלוש החלטות אסטרטגיות מצוות ההנהלה. ראשית, הוכרז על הקפאת גיוסים מלאה לשלושת החודשים הקרובים, כולל ביטול משרות ה-backend הפתוחות. שנית, הוחלט שכל microservice חדש ייכתב ב-Go, בעוד שה-codebase הקיים בפייתון יישאר כפי שהוא בינתיים. שלישית, הוכרז על הורדת ProductX ו-ProductY מה-roadmap לטובת sunset סופי. עלו מספר שאלות פתוחות, בהן תוכנית הכשרה ב-Go, עתיד הצוות שעבד על ProductX, ולוח זמנים למיגרציה של הקוד הקיים. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>כולל ביטול שתי משרות ה-backend הפתוחות; ההקפאה היא לשלושת החודשים הקרובים</context>\n</decision>\n<decision>\n<text>כל microservice חדש שייכתב יהיה ב-Go, לא בפייתון</text>\n<context>הקוד הקיים נשאר בפייתון בינתיים ולא יעברו עליו; אין לוח זמנים מדויק למיגרציה</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset — ההחלטה סופית, לא ממשיכים להשקיע בהם</text>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>לוח זמנים ותוכנית למיגרציה של ה-codebase הקיים בפייתון ל-Go — צוין שצריך לחשוב על כך ברבעון הבא אך לא גובש</text>\n</open_item>\n<open_item>\n<text>תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) — הוצע אך עדיין פתוח ולא הוחלט</text>\n</open_item>\n<open_item>\n<text>עתיד הצוות שעבד על ProductX — אבי ציין שהנושא יטופל אחד-על-אחד עם המנהלים הישירים אך לא פורט</text>\n</open_item>\n<open_item>\n<text>השפעת המעבר ל-Go על ה-monitoring וה-Datadog configuration — יוסי העלה את השאלה ולא קיבלה מענה מלא</text>\n</open_item>\n</open_items>",
+    "raw_output": "<summary>\nישיבת עדכון רבעונית של צוות ההנדסה שבה הציג אבי שלוש החלטות אסטרטגיות מצוות ההנהלה. ראשית, הוכרז על הקפאת גיוסים מלאה לשלושת החודשים הקרובים, כולל ביטול משרות ה-backend הפתוחות. שנית, הוחלט שכל microservice חדש ייכתב ב-Go ולא בפייתון, בעוד שה-codebase הקיים ימשיך לפעול בפייתון ללא לוח זמנים למיגרציה. שלישית, הוכרז על הורדת ProductX ו-ProductY מה-roadmap לטובת sunset סופי. שאלות שעלו בנוגע ל-staffing של הצוות שעבד על ProductX, תוכנית הכשרה ב-Go, ו-container orchestration נותרו פתוחות. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>כולל ביטול שתי משרות ה-backend הפתוחות; ההקפאה היא לשלושת החודשים הקרובים</context>\n</decision>\n<decision>\n<text>כל microservice חדש שייכתב יהיה ב-Go, לא בפייתון</text>\n<context>הקוד הקיים נשאר בפייתון בינתיים; אין לוח זמנים מדויק למיגרציה</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset — לא ממשיכים להשקיע בהם</text>\n<context>ההחלטה הוגדרה כסופית</context>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>לא גובש לוח זמנים או תוכנית למיגרציה של ה-codebase הקיים מפייתון ל-Go — צוין שצריך לחשוב על כך ברבעון הבא</text>\n</open_item>\n<open_item>\n<text>טיפול ב-staffing של הצוות שעבד על ProductX טרם הוכרז — אבי ציין שיטופל אחד-על-אחד עם המנהלים הישירים, אך לא נקבע מועד או תהליך</text>\n</open_item>\n<open_item>\n<text>תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) עדיין פתוחה ולא גובשה</text>\n</open_item>\n<open_item>\n<text>שאלת ה-monitoring ועדכון Datadog בעקבות המעבר ל-Go לא קיבלה מענה מלא — אושר שהתקציב נשמר אך לא הובהרה ההשפעה הטכנית</text>\n</open_item>\n</open_items>",
     "parsed": {
-      "summary": "ישיבת עדכון רבעונית של צוות ההנדסה שבה הציג אבי שלוש החלטות אסטרטגיות מצוות ההנהלה. ראשית, הוכרז על הקפאת גיוסים מלאה לשלושת החודשים הקרובים, כולל ביטול משרות ה-backend הפתוחות. שנית, הוחלט שכל microservice חדש ייכתב ב-Go, בעוד שה-codebase הקיים בפייתון יישאר כפי שהוא בינתיים. שלישית, הוכרז על הורדת ProductX ו-ProductY מה-roadmap לטובת sunset סופי. עלו מספר שאלות פתוחות, בהן תוכנית הכשרה ב-Go, עתיד הצוות שעבד על ProductX, ולוח זמנים למיגרציה של הקוד הקיים. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.",
+      "summary": "ישיבת עדכון רבעונית של צוות ההנדסה שבה הציג אבי שלוש החלטות אסטרטגיות מצוות ההנהלה. ראשית, הוכרז על הקפאת גיוסים מלאה לשלושת החודשים הקרובים, כולל ביטול משרות ה-backend הפתוחות. שנית, הוחלט שכל microservice חדש ייכתב ב-Go ולא בפייתון, בעוד שה-codebase הקיים ימשיך לפעול בפייתון ללא לוח זמנים למיגרציה. שלישית, הוכרז על הורדת ProductX ו-ProductY מה-roadmap לטובת sunset סופי. שאלות שעלו בנוגע ל-staffing של הצוות שעבד על ProductX, תוכנית הכשרה ב-Go, ו-container orchestration נותרו פתוחות. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.",
       "participants": [
         "אבי",
         "מיכל",
@@ -80,11 +84,11 @@
         },
         {
           "text": "כל microservice חדש שייכתב יהיה ב-Go, לא בפייתון",
-          "context": "הקוד הקיים נשאר בפייתון בינתיים ולא יעברו עליו; אין לוח זמנים מדויק למיגרציה"
+          "context": "הקוד הקיים נשאר בפייתון בינתיים; אין לוח זמנים מדויק למיגרציה"
         },
         {
-          "text": "ProductX ו-ProductY הולכים ל-sunset — ההחלטה סופית, לא ממשיכים להשקיע בהם",
-          "context": null
+          "text": "ProductX ו-ProductY הולכים ל-sunset — לא ממשיכים להשקיע בהם",
+          "context": "ההחלטה הוגדרה כסופית"
         }
       ],
       "action_items": [
@@ -96,16 +100,16 @@
       ],
       "open_items": [
         {
-          "text": "לוח זמנים ותוכנית למיגרציה של ה-codebase הקיים בפייתון ל-Go — צוין שצריך לחשוב על כך ברבעון הבא אך לא גובש"
+          "text": "לא גובש לוח זמנים או תוכנית למיגרציה של ה-codebase הקיים מפייתון ל-Go — צוין שצריך לחשוב על כך ברבעון הבא"
         },
         {
-          "text": "תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) — הוצע אך עדיין פתוח ולא הוחלט"
+          "text": "טיפול ב-staffing של הצוות שעבד על ProductX טרם הוכרז — אבי ציין שיטופל אחד-על-אחד עם המנהלים הישירים, אך לא נקבע מועד או תהליך"
         },
         {
-          "text": "עתיד הצוות שעבד על ProductX — אבי ציין שהנושא יטופל אחד-על-אחד עם המנהלים הישירים אך לא פורט"
+          "text": "תוכנית הכשרה ב-Go לצוות (workshop פנימי או קורס חיצוני) עדיין פתוחה ולא גובשה"
         },
         {
-          "text": "השפעת המעבר ל-Go על ה-monitoring וה-Datadog configuration — יוסי העלה את השאלה ולא קיבלה מענה מלא"
+          "text": "שאלת ה-monitoring ועדכון Datadog בעקבות המעבר ל-Go לא קיבלה מענה מלא — אושר שהתקציב נשמר אך לא הובהרה ההשפעה הטכנית"
         }
       ]
     },
@@ -115,19 +119,19 @@
       "decisions": 3,
       "action_items": 1,
       "open_items": 4,
-      "summary_chars": 506
+      "summary_chars": 534
     }
   },
   {
     "model": "claude-haiku-4-5-20251001",
-    "elapsed_s": 9.5,
-    "input_tokens": 4717,
-    "output_tokens": 989,
+    "elapsed_s": 9.14,
+    "input_tokens": 4862,
+    "output_tokens": 990,
     "cache_create": 0,
     "cache_read": 0,
-    "raw_output": "```xml\n<summary>\nישיבת חברה רבעונית של צוות ההנדסה בה הציג אבי (CTO) שלוש החלטות אסטרטגיות מצוות ההנהלה: הקפאת גיוסים לשלושת החודשים הקרובים, מעבר ל-Go בשירותים חדשים (תוך שמירת ה-codebase הקיים בפייתון), והסרת ProductX ו-ProductY מה-roadmap. עלו שאלות לגבי השפעת המעבר ל-Go על ה-monitoring, צורך בהכשרה, ו-container orchestration, שחלקן נותרו פתוחות. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>כל המשרות הפתוחות, כולל שתי משרות backend, מבוטלות בינתיים</context>\n</decision>\n<decision>\n<text>כל microservice חדש שיכתב יהיה ב-Go, לא בפייתון</text>\n<context>זו אסטרטגיה חדשה לשירותים חדשים; ה-codebase הקיים בפייתון נשאר בינתיים ללא לוח זמנים מדויק למיגרציה</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset — הסרה מה-roadmap</text>\n<context>ההחלטה סופית, לא תהיה השקעה נוספת בהם; ה-staffing הספציפי יטופל אחד-על-אחד עם המנהלים הישירים</context>\n</decision>\n<decision>\n<text>Kubernetes ממשיך כ-container orchestration</text>\n<context>זה לא חלק מההחלטות החדשות של היום — המצב הקיים נשמר</context>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>צריך לגבש תוכנית הכשרה ל-Go — בחירה בין workshop פנימי לקורס חיצוני</text>\n</open_item>\n<open_item>\n<text>לא קיים לוח זמנים מדויק למיגרציה של ה-codebase הקיים מפייתון ל-Go — צריך לחשוב על זה ברבעון הבא</text>\n</open_item>\n<open_item>\n<text>טיפול ב-staffing של הצוותים שעובדים על ProductX ו-ProductY לאחר ה-sunset</text>\n</open_item>\n</open_items>\n```",
+    "raw_output": "```xml\n<summary>\nישיבת חברה רבעונית בהנדסה בה הציג אבי (CTO) שלוש החלטות אסטרטגיות מהנהלה: הקפאת גיוסים לשלושת החודשים הקרובים, מעבר ל-Go בשירותים חדשים (כאשר ה-codebase הקיים בפייתון נשאר ללא שינוי בינתיים), והסרת ProductX ו-ProductY מה-roadmap. עלו שאלות לגבי השפעת ה-Go על monitoring, צורך בהכשרה, ו-container orchestration, שחלקן נדחו לדיון עתידי. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.\n</summary>\n\n<participants>\n<participant>אבי</participant>\n<participant>מיכל</participant>\n<participant>יוסי</participant>\n<participant>דובר א</participant>\n</participants>\n\n<decisions>\n<decision>\n<text>freeze על כל פוזיציה חדשה עד סוף Q1</text>\n<context>כל המשרות הפתוחות, כולל שתי משרות backend, מבוטלות בינתיים</context>\n</decision>\n<decision>\n<text>כל microservice חדש שיכתב יהיה ב-Go, לא בפייתון</text>\n<context>זו החלטה אסטרטגית לשירותים חדשים; ה-codebase הקיים בפייתון נשאר בינתיים ללא מיגרציה מדויקת</context>\n</decision>\n<decision>\n<text>ProductX ו-ProductY הולכים ל-sunset — הסרה מה-roadmap</text>\n<context>ההחלטה סופית, לא ממשיכים להשקיע בהם; staffing ספציפי יטופל אחד-על-אחד עם המנהלים הישירים</context>\n</decision>\n<decision>\n<text>Kubernetes ממשיך — אותו דבר עכשיו</text>\n<context>זה לא חלק מההחלטות היום; container orchestration נשאר ללא שינוי</context>\n</decision>\n</decisions>\n\n<action_items>\n<action_item>\n<who>אבי</who>\n<what>לשלוח מסמך Q&A מסודר עם מענה לכל השאלות שעלו בישיבה</what>\n<when>עד סוף השבוע</when>\n</action_item>\n</action_items>\n\n<open_items>\n<open_item>\n<text>צריך לגבש תוכנית הכשרה ל-Go — workshop פנימי או קורס חיצוני, עדיין פתוח</text>\n</open_item>\n<open_item>\n<text>צריך לחשוב על לוח זמנים מדויק למיגרציה של ה-codebase הקיים מפייתון ל-Go ברבעון הבא</text>\n</open_item>\n<open_item>\n<text>staffing ספציפי של הצוות שעובד על ProductX ו-ProductY יטופל אחד-על-אחד עם המנהלים הישירים</text>\n</open_item>\n</open_items>\n```",
     "parsed": {
-      "summary": "ישיבת חברה רבעונית של צוות ההנדסה בה הציג אבי (CTO) שלוש החלטות אסטרטגיות מצוות ההנהלה: הקפאת גיוסים לשלושת החודשים הקרובים, מעבר ל-Go בשירותים חדשים (תוך שמירת ה-codebase הקיים בפייתון), והסרת ProductX ו-ProductY מה-roadmap. עלו שאלות לגבי השפעת המעבר ל-Go על ה-monitoring, צורך בהכשרה, ו-container orchestration, שחלקן נותרו פתוחות. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.",
+      "summary": "ישיבת חברה רבעונית בהנדסה בה הציג אבי (CTO) שלוש החלטות אסטרטגיות מהנהלה: הקפאת גיוסים לשלושת החודשים הקרובים, מעבר ל-Go בשירותים חדשים (כאשר ה-codebase הקיים בפייתון נשאר ללא שינוי בינתיים), והסרת ProductX ו-ProductY מה-roadmap. עלו שאלות לגבי השפעת ה-Go על monitoring, צורך בהכשרה, ו-container orchestration, שחלקן נדחו לדיון עתידי. אבי התחייב לשלוח מסמך Q&A מסודר עד סוף השבוע.",
       "participants": [
         "אבי",
         "מיכל",
@@ -141,15 +145,15 @@
         },
         {
           "text": "כל microservice חדש שיכתב יהיה ב-Go, לא בפייתון",
-          "context": "זו אסטרטגיה חדשה לשירותים חדשים; ה-codebase הקיים בפייתון נשאר בינתיים ללא לוח זמנים מדויק למיגרציה"
+          "context": "זו החלטה אסטרטגית לשירותים חדשים; ה-codebase הקיים בפייתון נשאר בינתיים ללא מיגרציה מדויקת"
         },
         {
           "text": "ProductX ו-ProductY הולכים ל-sunset — הסרה מה-roadmap",
-          "context": "ההחלטה סופית, לא תהיה השקעה נוספת בהם; ה-staffing הספציפי יטופל אחד-על-אחד עם המנהלים הישירים"
+          "context": "ההחלטה סופית, לא ממשיכים להשקיע בהם; staffing ספציפי יטופל אחד-על-אחד עם המנהלים הישירים"
         },
         {
-          "text": "Kubernetes ממשיך כ-container orchestration",
-          "context": "זה לא חלק מההחלטות החדשות של היום — המצב הקיים נשמר"
+          "text": "Kubernetes ממשיך — אותו דבר עכשיו",
+          "context": "זה לא חלק מההחלטות היום; container orchestration נשאר ללא שינוי"
         }
       ],
       "action_items": [
@@ -161,13 +165,13 @@
       ],
       "open_items": [
         {
-          "text": "צריך לגבש תוכנית הכשרה ל-Go — בחירה בין workshop פנימי לקורס חיצוני"
+          "text": "צריך לגבש תוכנית הכשרה ל-Go — workshop פנימי או קורס חיצוני, עדיין פתוח"
         },
         {
-          "text": "לא קיים לוח זמנים מדויק למיגרציה של ה-codebase הקיים מפייתון ל-Go — צריך לחשוב על זה ברבעון הבא"
+          "text": "צריך לחשוב על לוח זמנים מדויק למיגרציה של ה-codebase הקיים מפייתון ל-Go ברבעון הבא"
         },
         {
-          "text": "טיפול ב-staffing של הצוותים שעובדים על ProductX ו-ProductY לאחר ה-sunset"
+          "text": "staffing ספציפי של הצוות שעובד על ProductX ו-ProductY יטופל אחד-על-אחד עם המנהלים הישירים"
         }
       ]
     },
