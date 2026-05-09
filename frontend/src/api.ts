@@ -15,29 +15,15 @@ interface AnalyzeCallbacks {
   onNetworkError: (message: string) => void;
 }
 
-// EventSource only supports GET, but our /analyze endpoint is POST with a
-// multipart body. So we use fetch() with a streaming reader and parse the
-// SSE wire format manually.
-export async function streamAnalyze(
-  file: File,
+const NETWORK_ERROR_MSG =
+  "השרת לא מגיב — ודא שה-backend רץ על פורט 8000";
+
+// EventSource only supports GET, but our endpoints are POST. So we use
+// fetch() with a streaming reader and parse the SSE wire format manually.
+async function consumeSSEStream(
+  response: Response,
   callbacks: AnalyzeCallbacks,
 ): Promise<void> {
-  const formData = new FormData();
-  formData.append("audio", file);
-
-  let response: Response;
-  try {
-    response = await fetch("http://127.0.0.1:8000/analyze", {
-      method: "POST",
-      body: formData,
-    });
-  } catch {
-    callbacks.onNetworkError(
-      "השרת לא מגיב — ודא שה-backend רץ על פורט 8000",
-    );
-    return;
-  }
-
   if (!response.ok || !response.body) {
     callbacks.onNetworkError(`שגיאה מהשרת: HTTP ${response.status}`);
     return;
@@ -71,7 +57,6 @@ export async function streamAnalyze(
 
       try {
         const data = JSON.parse(dataLine);
-        // Debug: lets developers see streaming behavior live in DevTools
         console.log(`[SSE] ${eventName}`, data);
         switch (eventName) {
           case "status":
@@ -95,6 +80,49 @@ export async function streamAnalyze(
       }
     }
   }
+}
+
+export async function streamAnalyze(
+  file: File,
+  callbacks: AnalyzeCallbacks,
+): Promise<void> {
+  const formData = new FormData();
+  formData.append("audio", file);
+
+  let response: Response;
+  try {
+    response = await fetch("http://127.0.0.1:8000/analyze", {
+      method: "POST",
+      body: formData,
+    });
+  } catch {
+    callbacks.onNetworkError(NETWORK_ERROR_MSG);
+    return;
+  }
+
+  await consumeSSEStream(response, callbacks);
+}
+
+// Demo mode: analyze a Hebrew transcript directly, skipping Whisper. Used
+// when the user clicks one of the pre-loaded sample meetings on the idle
+// state. Reuses the same SSE stream consumer as the audio path.
+export async function streamAnalyzeText(
+  text: string,
+  callbacks: AnalyzeCallbacks,
+): Promise<void> {
+  let response: Response;
+  try {
+    response = await fetch("http://127.0.0.1:8000/analyze-text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+  } catch {
+    callbacks.onNetworkError(NETWORK_ERROR_MSG);
+    return;
+  }
+
+  await consumeSSEStream(response, callbacks);
 }
 
 export async function downloadDocx(analysis: MeetingAnalysis): Promise<void> {

@@ -10,6 +10,7 @@ load_dotenv()
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
+from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 
 from .contracts import MeetingAnalysis
@@ -21,6 +22,10 @@ from .sse_schema import (
     StatusEvent,
     TranscriptEvent,
 )
+
+
+class AnalyzeTextRequest(BaseModel):
+    text: str
 
 logging.basicConfig(
     level=logging.INFO,
@@ -86,6 +91,38 @@ async def analyze(audio: UploadFile = File(...)):
     return EventSourceResponse(
         event_generator(audio_bytes, audio.filename or "audio")
     )
+
+
+# ─── Demo-mode endpoint ───────────────────────────────────────────────────
+# Skips Whisper transcription entirely; takes a Hebrew transcript text
+# directly and runs only the Claude summarization step. Used by the frontend
+# "demo mode" feature so users can try the analyzer without uploading audio.
+async def text_event_generator(transcript: str):
+    try:
+        # Echo transcript back so the frontend has it for the transcript panel
+        # and the provenance highlighting feature.
+        yield _sse("transcript", TranscriptEvent(text=transcript))
+
+        yield _sse("status", StatusEvent(step="summarizing"))
+        analysis = await asyncio.to_thread(summarization.analyze, transcript)
+        yield _sse("result", ResultEvent(**analysis.model_dump()))
+
+        yield _sse("done", DoneEvent())
+
+    except summarization.SummarizationError as exc:
+        logger.warning("summarization_error code=%s", exc.code)
+        yield _sse("error", ErrorEvent(code=exc.code, message=exc.message))
+
+
+@app.post("/analyze-text")
+async def analyze_text(request: AnalyzeTextRequest):
+    transcript = request.text.strip()
+    if not transcript:
+        raise HTTPException(
+            status_code=422,
+            detail={"code": "EMPTY_TEXT", "message": "טקסט ריק"},
+        )
+    return EventSourceResponse(text_event_generator(transcript))
 
 
 @app.post("/export")

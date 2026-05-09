@@ -3,15 +3,22 @@ import { SectionHeading } from "./SummarySection";
 
 interface Props {
   items: ActionItem[];
+  onProvenance?: (query: string) => void;
 }
 
-export function ActionItemsTable({ items }: Props) {
+export function ActionItemsTable({ items, onProvenance }: Props) {
+  const copyText =
+    items.length > 0
+      ? items.map((a) => `• ${a.who} — ${a.what} (${a.when})`).join("\n")
+      : undefined;
+
   return (
     <section>
       <SectionHeading
         number="04"
         label="משימות לביצוע"
         count={items.length}
+        copyText={copyText}
       />
       {items.length === 0 ? (
         <p className="text-faint italic">אין משימות לביצוע</p>
@@ -44,10 +51,14 @@ export function ActionItemsTable({ items }: Props) {
               {items.map((a, i) => (
                 <tr
                   key={i}
+                  onClick={() => onProvenance?.(a.what)}
                   className={[
                     "transition-colors hover:bg-card",
+                    onProvenance && "cursor-pointer",
                     i < items.length - 1 ? "border-b border-line/60" : "",
-                  ].join(" ")}
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                 >
                   <td className="px-6 py-5 align-top text-fg text-[16px] font-medium">
                     {a.who}

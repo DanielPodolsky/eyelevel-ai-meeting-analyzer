@@ -1,10 +1,13 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { paginate } from "../lib/paginate";
+import { Pagination } from "./Pagination";
 import { Spinner } from "./Spinner";
 
 interface Props {
   filename: string | null;
   fileSize: number | null;
+  audioDuration: number | null;
   step: "transcribing" | "summarizing" | null;
   transcript: string;
   startTime: number;
@@ -36,9 +39,16 @@ function formatElapsed(seconds: number): string {
   return m > 0 ? `${m}:${s.toString().padStart(2, "0")}` : `${s}s`;
 }
 
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = Math.round(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 export function ProcessingView({
   filename,
   fileSize,
+  audioDuration,
   step,
   transcript,
   startTime,
@@ -66,14 +76,22 @@ export function ProcessingView({
             {filename && (
               <p
                 className="font-mono text-[12px] text-fg truncate mb-1.5"
-                dir="ltr"
+                dir="auto"
               >
                 {filename}
               </p>
             )}
-            {fileSize != null && (
-              <p className="font-mono text-[11px] text-faint tracking-wider">
-                {formatBytes(fileSize)}
+            {(fileSize != null || audioDuration != null) && (
+              <p className="font-mono text-[11px] text-faint tracking-wider flex gap-3">
+                {fileSize != null && <span>{formatBytes(fileSize)}</span>}
+                {audioDuration != null && (
+                  <>
+                    {fileSize != null && (
+                      <span className="opacity-50">·</span>
+                    )}
+                    <span dir="ltr">{formatDuration(audioDuration)}</span>
+                  </>
+                )}
               </p>
             )}
           </div>
@@ -172,22 +190,68 @@ export function ProcessingView({
         </div>
       </div>
 
-      {/* ─── Live transcript card ────────────────────────────────── */}
+      {/* ─── Live transcript card — paginated, single elegant column */}
       {transcript && (
-        <div className="fade-in rounded-2xl border border-line bg-card px-7 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-faint">
-              תמלול
-            </p>
-            <p className="font-mono text-[11px] text-faint tabular-nums">
-              <span dir="ltr">{transcript.length}</span> תווים
-            </p>
-          </div>
-          <p className="text-fg text-[16px] leading-[1.85] whitespace-pre-wrap">
-            {transcript}
-          </p>
-        </div>
+        <LiveTranscriptCard transcript={transcript} />
       )}
+    </div>
+  );
+}
+
+interface LiveTranscriptCardProps {
+  transcript: string;
+}
+
+function LiveTranscriptCard({ transcript }: LiveTranscriptCardProps) {
+  const pages = useMemo(() => paginate(transcript), [transcript]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Reset to page 1 whenever transcript changes (e.g., new analysis).
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [transcript]);
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  const pageData = pages[currentPage] ?? pages[0];
+  const pageParagraphs = pageData.text.split(/\n\n+/);
+
+  return (
+    <div className="fade-in rounded-2xl border border-line bg-card px-7 py-6">
+      <div className="flex items-center justify-between mb-5">
+        <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-faint">
+          תמלול
+        </p>
+        <p className="font-mono text-[11px] text-faint tabular-nums">
+          <span dir="ltr">{transcript.length}</span> תווים
+        </p>
+      </div>
+      <div
+        ref={scrollAreaRef}
+        className="max-h-[380px] overflow-y-auto scroll-clean"
+      >
+        <div className="max-w-[62ch] mx-auto">
+          {pageParagraphs.map((para, i) => (
+            <p
+              key={i}
+              className="font-display text-fg text-[17px] leading-[1.9] mb-5 last:mb-0"
+            >
+              {para}
+            </p>
+          ))}
+        </div>
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={pages.length}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

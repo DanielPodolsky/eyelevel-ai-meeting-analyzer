@@ -5,17 +5,16 @@ interface Props {
   participants: string[];
 }
 
-const pillContainer = {
-  animate: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
+const rosterContainer = {
+  animate: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
 };
 
-const pillItem = {
-  initial: { opacity: 0, y: 4, scale: 0.96 },
+const rosterItem = {
+  initial: { opacity: 0, y: 3 },
   animate: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
@@ -26,29 +25,28 @@ export function ParticipantsList({ participants }: Props) {
         number="02"
         label="משתתפים"
         count={participants.length}
+        copyText={
+          participants.length > 0
+            ? participants.map((p) => `• ${p}`).join("\n")
+            : undefined
+        }
       />
       {participants.length === 0 ? (
         <p className="text-faint italic">—</p>
       ) : (
         <motion.ul
-          className="flex flex-wrap gap-2.5"
-          variants={pillContainer}
+          variants={rosterContainer}
           initial="initial"
           animate="animate"
+          className="flex flex-wrap items-baseline gap-x-8 gap-y-2.5"
         >
           {participants.map((p, i) => (
             <motion.li
               key={i}
-              variants={pillItem}
-              className="rounded-full border border-line bg-card-2 px-4 py-2 text-fg text-[15px] flex items-center gap-2"
+              variants={rosterItem}
+              className="text-fg text-[15px] leading-none cursor-default transition-colors hover:text-accent"
             >
-              <span
-                dir="ltr"
-                className="font-mono text-[10px] text-faint tabular-nums"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span>{p}</span>
+              {p}
             </motion.li>
           ))}
         </motion.ul>

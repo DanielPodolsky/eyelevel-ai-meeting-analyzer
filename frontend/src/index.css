@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Palette: deep neutral canvas, single warm accent ─────────────── */
+  /* ─── Palette: deep neutral canvas, single warm accent (DARK — default) */
   --color-canvas: #08080a;
   --color-card: #111114;
   --color-card-2: #1a1a1f;
@@ -28,6 +28,27 @@
   --ease-out-quick: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ─── Light theme — opt-in via [data-theme="light"] on <html> ────────── */
+/* Tokens ride the same names so all `bg-canvas`, `text-fg`, `border-line`
+   utilities work without modification — only the CSS-variable values change.
+   The accent deepens for legibility on white; state colors tone down. */
+[data-theme="light"] {
+  --color-canvas: #fafaf9;
+  --color-card: #ffffff;
+  --color-card-2: #f4f3ee;
+  --color-line: #e5e3dd;
+  --color-line-strong: #cfccc4;
+
+  --color-fg: #1d1d1f;
+  --color-muted: #6e6e73;
+  --color-faint: #9b9aa0;
+
+  --color-accent: #a87850; /* deeper tobacco for white-bg contrast */
+
+  --color-good: #2d8659;
+  --color-bad: #c4453d;
+}
+
 /* ─── Base reset + page chrome ─────────────────────────────────────── */
 
 html,
@@ -49,6 +70,7 @@ body {
 
 html {
   overscroll-behavior: none;
+  scroll-behavior: smooth;
 }
 
 ::selection {

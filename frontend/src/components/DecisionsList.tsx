@@ -4,12 +4,25 @@ import { SectionHeading } from "./SummarySection";
 
 interface Props {
   decisions: Decision[];
+  onProvenance?: (query: string) => void;
 }
 
-export function DecisionsList({ decisions }: Props) {
+export function DecisionsList({ decisions, onProvenance }: Props) {
+  const copyText =
+    decisions.length > 0
+      ? decisions
+          .map((d) => (d.context ? `• ${d.text}\n   ${d.context}` : `• ${d.text}`))
+          .join("\n\n")
+      : undefined;
+
   return (
     <section>
-      <SectionHeading number="03" label="החלטות" count={decisions.length} />
+      <SectionHeading
+        number="03"
+        label="החלטות"
+        count={decisions.length}
+        copyText={copyText}
+      />
       {decisions.length === 0 ? (
         <p className="text-faint italic">לא התקבלו החלטות</p>
       ) : (
@@ -19,7 +32,14 @@ export function DecisionsList({ decisions }: Props) {
               key={i}
               whileHover={{ y: -2 }}
               transition={{ type: "spring", stiffness: 400, damping: 26 }}
-              className="relative rounded-xl bg-card-2/60 border border-line px-6 py-5 hover:border-line-strong transition-colors"
+              onClick={() => onProvenance?.(d.text)}
+              className={[
+                "relative rounded-xl bg-card-2/60 border border-line px-6 py-5",
+                "hover:border-line-strong transition-colors",
+                onProvenance && "cursor-pointer",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               <span
                 aria-hidden

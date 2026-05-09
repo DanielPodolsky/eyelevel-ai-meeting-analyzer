@@ -4,6 +4,7 @@ import { SectionHeading } from "./SummarySection";
 
 interface Props {
   items: OpenItem[];
+  onProvenance?: (query: string) => void;
 }
 
 const listContainer = {
@@ -19,13 +20,18 @@ const listItem = {
   },
 };
 
-export function OpenItemsList({ items }: Props) {
+export function OpenItemsList({ items, onProvenance }: Props) {
   return (
     <section>
       <SectionHeading
         number="05"
         label="נושאים פתוחים"
         count={items.length}
+        copyText={
+          items.length > 0
+            ? items.map((o) => `• ${o.text}`).join("\n")
+            : undefined
+        }
       />
       {items.length === 0 ? (
         <p className="text-faint italic">אין נושאים פתוחים</p>
@@ -40,7 +46,13 @@ export function OpenItemsList({ items }: Props) {
             <motion.li
               key={i}
               variants={listItem}
-              className="flex gap-4 items-start"
+              onClick={() => onProvenance?.(o.text)}
+              className={[
+                "flex gap-4 items-start rounded-lg -mx-3 px-3 py-1 transition-colors",
+                onProvenance && "cursor-pointer hover:bg-card-2/60",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               <span
                 dir="ltr"

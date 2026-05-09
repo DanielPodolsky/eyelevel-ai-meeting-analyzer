@@ -91,9 +91,25 @@ def analyze(transcript: str) -> MeetingAnalysis:
         ) from exc
 
 
+_AMP_ENTITY_PATTERN = re.compile(
+    r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)"
+)
+
+
 def _parse_claude_response(text: str) -> MeetingAnalysis:
     # Synthetic root: Claude returns 5 sibling sections, not a single root.
-    root = ET.fromstring(f"<root>{text}</root>")
+    wrapped = f"<root>{text}</root>"
+
+    try:
+        root = ET.fromstring(wrapped)
+    except ET.ParseError:
+        # Real meeting content can include literal '&' characters (e.g., "Q&A",
+        # "AT&T", "R&D") which Claude correctly preserves verbatim per the
+        # prompt's "preserve original wording" rule — but unescaped '&' breaks
+        # strict XML parsing. Escape any '&' that isn't already an entity
+        # reference and retry. Try-then-fallback keeps the happy path fast.
+        sanitized = _AMP_ENTITY_PATTERN.sub("&amp;", wrapped)
+        root = ET.fromstring(sanitized)
 
     return MeetingAnalysis(
         summary=(root.findtext("summary") or "").strip(),
