@@ -15,6 +15,8 @@ interface AnalyzeCallbacks {
   onNetworkError: (message: string) => void;
 }
 
+const API_BASE = "http://127.0.0.1:8000";
+
 const NETWORK_ERROR_MSG =
   "השרת לא מגיב — ודא שה-backend רץ על פורט 8000";
 
@@ -91,7 +93,7 @@ export async function streamAnalyze(
 
   let response: Response;
   try {
-    response = await fetch("http://127.0.0.1:8000/analyze", {
+    response = await fetch(`${API_BASE}/analyze`, {
       method: "POST",
       body: formData,
     });
@@ -112,7 +114,7 @@ export async function streamAnalyzeText(
 ): Promise<void> {
   let response: Response;
   try {
-    response = await fetch("http://127.0.0.1:8000/analyze-text", {
+    response = await fetch(`${API_BASE}/analyze-text`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -126,7 +128,7 @@ export async function streamAnalyzeText(
 }
 
 export async function downloadDocx(analysis: MeetingAnalysis): Promise<void> {
-  const response = await fetch("http://127.0.0.1:8000/export", {
+  const response = await fetch(`${API_BASE}/export`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(analysis),
