@@ -1,6 +1,6 @@
 # Tamtzit · תמצית
 
-> **Hebrew meeting analyzer.** Audio in, structured Hebrew analysis out — summary, participants, decisions, action items, open items. RTL-first. Word export with proper bidi rendering. Built for the Eye Level AI screening task (~5h brief; actual ~17–18h with deliberate over-investment in the system prompt and a differentiation pass).
+> **Hebrew meeting analyzer.** Audio in, structured Hebrew analysis out — summary, participants, decisions, action items, open items. RTL-first. Word export with proper bidi rendering.
 
 📺 **Walkthrough**
 
@@ -12,9 +12,9 @@
 
 ## Quick demo
 
-You don't need to record anything to try the app — three hardcoded Hebrew sample transcripts ship in the UI. Click **"או נסה דוגמא"** ("or try a sample") on the upload screen and pick one. The samples skip Whisper entirely (`POST /analyze-text`) so you see results in ~5 seconds instead of ~45.
+You don't need to record anything to try the app — three hardcoded Hebrew sample transcripts ship in the UI. Click **"או נסה דוגמא"** ("or try a sample") on the upload screen and pick one. The samples skip Whisper entirely (`POST /analyze-text`).
 
-If you want to run the full Whisper pipeline, drag-drop any Hebrew `.mp3`/`.wav`/`.m4a` (≤25 MB) onto the upload zone.
+If you want to run the full Whisper pipeline, drag-drop any Hebrew `.mp3`/`.wav`/`.m4a` (≤100 MB) onto the upload zone. Files >25 MB are server-side chunked at silence boundaries before transcription (see Architecture Decision #5 below).
 
 ---
 
@@ -27,6 +27,15 @@ If you want to run the full Whisper pipeline, drag-drop any Hebrew `.mp3`/`.wav`
 - **ffmpeg** ≥ 4 (`brew install ffmpeg` on macOS, `apt install ffmpeg` on Debian) — required by pydub for audio chunking on files >25MB
 - **`ANTHROPIC_API_KEY`** ([get one](https://console.anthropic.com))
 - **`OPENAI_API_KEY`** ([get one](https://platform.openai.com))
+
+### Clone the repo
+
+```bash
+git clone https://github.com/DanielPodolsky/eyelevel-ai-meeting-analyzer.git
+cd eyelevel-ai-meeting-analyzer
+```
+
+All subsequent commands assume you're in the repo root.
 
 ### Backend (terminal 1)
 
@@ -74,7 +83,7 @@ The non-obvious calls, each with the reasoning that drove them.
 
 The system prompt's XML output schema (`<summary>`, `<participants>`, `<decisions>`, `<action_items>`, `<open_items>`) was locked in **Phase 1**, before any backend or frontend code was written. Pydantic models (`backend/app/contracts.py`), TypeScript types (`frontend/src/types/contracts.ts`), `.docx` headings (`backend/app/services/export.py`), and the SSE `result` event payload all derive from that single decision.
 
-**Dividend paid mid-build:** Round 8 of prompt iteration found that modal recommendations had no structured destination; the schema needed a fifth section. Round 9 added `<open_items>` at ~30 min cost. The same change *after* Phase 2/3 code existed would have been a 4–6 file refactor across Pydantic, FastAPI, TypeScript, and `.docx` exporter. Locking the contract first turns expensive cross-layer refactors into single-file edits.
+**Dividend paid mid-build:** Round 8 of prompt iteration found that modal recommendations had no structured destination; the schema needed a fifth section. Round 9 added `<open_items>` at ~30 min cost. The same change _after_ Phase 2/3 code existed would have been a 4–6 file refactor across Pydantic, FastAPI, TypeScript, and `.docx` exporter. Locking the contract first turns expensive cross-layer refactors into single-file edits.
 
 ### 2. Server-Sent Events for the 30–60s endpoint
 
@@ -82,7 +91,7 @@ The `POST /analyze` pipeline takes ~45–75 seconds (Whisper + Claude). The user
 
 - **Sync POST + spinner:** 60s of blank loading state, no signal whether the system is working or stuck.
 - **Polling on a job-state model:** server-side state to track + clean up + secure.
-- **SSE (chosen):** the connection IS the state container — no shared store, no TTL, no cleanup. Status events drive a Hebrew progress pill (*"מתמלל..." → "מסכם..."*) so the user sees real progression.
+- **SSE (chosen):** the connection IS the state container — no shared store, no TTL, no cleanup. Status events drive a Hebrew progress pill (_"מתמלל..." → "מסכם..."_) so the user sees real progression.
 
 SSE also gives Asher engineering signal during code review (typed event union, hand-rolled parser handling CRLF correctly per RFC 6202) even when fast-paced during a live demo.
 
@@ -161,23 +170,23 @@ The 100MB ceiling is a practical pydub-in-memory bound (it loads the entire file
 
 All versions verified via live dependency lookup at `/own:init` on 2026-05-08, then locked into `requirements.txt` and `package.json`.
 
-| Layer | Technology | Version |
-|---|---|---|
-| Frontend framework | React | 19.2.5 |
-| Build tooling | Vite | 8.0.10 |
-| Language | TypeScript | 6.0.2 |
-| Styling | Tailwind CSS | 4.3.0 |
-| Animation | motion (formerly Framer Motion) | 12.38.0 |
-| Backend framework | FastAPI | 0.136.1 |
-| ASGI server | Uvicorn | 0.46.0 |
-| File upload | python-multipart | 0.0.27 |
-| SSE wire layer | sse-starlette | 3.4.2 |
-| Word export | python-docx | 1.2.0 |
-| Audio chunking | pydub | 0.25.1 |
-| LLM SDK | anthropic | 0.100.0 |
-| Speech-to-text SDK | openai | 2.36.0 |
-| Language model | Claude Sonnet 4.6 | (API) |
-| Speech model | Whisper | (API) |
+| Layer              | Technology                      | Version |
+| ------------------ | ------------------------------- | ------- |
+| Frontend framework | React                           | 19.2.5  |
+| Build tooling      | Vite                            | 8.0.10  |
+| Language           | TypeScript                      | 6.0.2   |
+| Styling            | Tailwind CSS                    | 4.3.0   |
+| Animation          | motion (formerly Framer Motion) | 12.38.0 |
+| Backend framework  | FastAPI                         | 0.136.1 |
+| ASGI server        | Uvicorn                         | 0.46.0  |
+| File upload        | python-multipart                | 0.0.27  |
+| SSE wire layer     | sse-starlette                   | 3.4.2   |
+| Word export        | python-docx                     | 1.2.0   |
+| Audio chunking     | pydub                           | 0.25.1  |
+| LLM SDK            | anthropic                       | 0.100.0 |
+| Speech-to-text SDK | openai                          | 2.36.0  |
+| Language model     | Claude Sonnet 4.6               | (API)   |
+| Speech model       | Whisper                         | (API)   |
 
 ---
 
@@ -185,15 +194,15 @@ All versions verified via live dependency lookup at `/own:init` on 2026-05-08, t
 
 Honest about what's not in scope (yet) — and the path forward for each.
 
-| Limitation | Mitigation path |
-|---|---|
-| **100 MB upload ceiling** (pydub PCM-in-memory bound during chunking — files between 25–100MB are silence-chunked and parallel-transcribed; beyond 100MB risks OOM on dev hardware) | Direct ffmpeg subprocess for streaming chunk extraction (no PCM buffering); production deployment can lift the cap by extracting chunks lazily |
-| **No speaker diarization** — speakers identified only when explicitly named in speech | AssemblyAI Universal-1 (built-in diarization), WhisperX (self-hosted with diarization), or pre-upload UX hint asking user to list expected participants |
-| **Hebrew-only** — UI strings, system prompt rules, and test transcripts all assume Hebrew | UI: ~2.5h with i18next. Analysis: ~12–16h per new language (each language needs its own prompt iteration arc against representative transcripts) |
-| **No automated tests** — manual smoke tests only | Unit tests for `lib/fuzzyMatch.ts` + `lib/paginate.ts` (pure functions, easy first targets). Integration tests for the SSE event sequence. Snapshot tests for `.docx` output. |
-| **Local demo only** — not deployed | FastAPI behind nginx + frontend on Vercel/Netlify. Out of scope for screening; ~1–2h of work. |
-| **Hedge concatenation** — when two speakers contribute consecutive hedges, both are preserved verbatim per prompt rule #8 | Future Phase 1.E iteration could distinguish "hedge followed by commitment" from "two independent hedges" — needs a representative transcript first. |
-| **One commit message hedged** — `feat: differentiation pass` is more jargon-y than the [Commit Pitch](PROCESS.md) standard the rest of `git log` follows | Left as-is to avoid force-pushing `main`. Future commits use full Commit Pitch format. |
+| Limitation                                                                                                                                                                          | Mitigation path                                                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **100 MB upload ceiling** (pydub PCM-in-memory bound during chunking — files between 25–100MB are silence-chunked and parallel-transcribed; beyond 100MB risks OOM on dev hardware) | Direct ffmpeg subprocess for streaming chunk extraction (no PCM buffering); production deployment can lift the cap by extracting chunks lazily                                |
+| **No speaker diarization** — speakers identified only when explicitly named in speech                                                                                               | AssemblyAI Universal-1 (built-in diarization), WhisperX (self-hosted with diarization), or pre-upload UX hint asking user to list expected participants                       |
+| **Hebrew-only** — UI strings, system prompt rules, and test transcripts all assume Hebrew                                                                                           | UI: ~2.5h with i18next. Analysis: ~12–16h per new language (each language needs its own prompt iteration arc against representative transcripts)                              |
+| **No automated tests** — manual smoke tests only                                                                                                                                    | Unit tests for `lib/fuzzyMatch.ts` + `lib/paginate.ts` (pure functions, easy first targets). Integration tests for the SSE event sequence. Snapshot tests for `.docx` output. |
+| **Local demo only** — not deployed                                                                                                                                                  | FastAPI behind nginx + frontend on Vercel/Netlify. Out of scope for screening; ~1–2h of work.                                                                                 |
+| **Hedge concatenation** — when two speakers contribute consecutive hedges, both are preserved verbatim per prompt rule #8                                                           | Future Phase 1.E iteration could distinguish "hedge followed by commitment" from "two independent hedges" — needs a representative transcript first.                          |
+| **One commit message hedged** — `feat: differentiation pass` is more jargon-y than the [Commit Pitch](PROCESS.md) standard the rest of `git log` follows                            | Left as-is to avoid force-pushing `main`. Future commits use full Commit Pitch format.                                                                                        |
 
 ---
 
@@ -206,10 +215,10 @@ Honest about what's not in scope (yet) — and the path forward for each.
 
 ## Acknowledgments
 
-Built with **[OwnYourCode](https://github.com/DanielPodolsky/ownyourcode)** — my own AI-mentored development framework that enforces *Active Typist* (the developer writes every line) + *Socratic guidance* (max 8 lines of example code) + *Evidence-Based docs lookups* + *6-Gate code review*. The framework's evidence — real prompts, real stuck-and-solved moments, real time spent — feeds into `PROCESS.md`.
+Built with **[OwnYourCode](https://github.com/DanielPodolsky/ownyourcode)** — my own AI-mentored development framework that enforces _Active Typist_ (the developer writes every line) + _Socratic guidance_ (max 8 lines of example code) + _Evidence-Based docs lookups_ + _6-Gate code review_. The framework's evidence — real prompts, real stuck-and-solved moments, real time spent — feeds into `PROCESS.md`.
 
 Powered by **[Anthropic Claude](https://anthropic.com)** (Sonnet 4.6 for analysis) and **[OpenAI Whisper](https://openai.com)** (transcription).
 
 ---
 
-*Built by [Daniel Podolsky](https://github.com/DanielPodolsky) · Eye Level AI screening · 2026-05-09*
+_Built by [Daniel Podolsky](https://github.com/DanielPodolsky) · Eye Level AI screening · 2026-05-09_
